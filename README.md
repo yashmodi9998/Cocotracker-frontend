@@ -13,7 +13,7 @@ The Coconut Juice Inventory Management System is a web application designed to h
 
 ## Tech Stack
 
-- **Frontend**: React.js with Vite (a next-generation frontend tool) and Tailwind CSS for styling.
+- **Frontend**: React.js with Vite and Tailwind CSS for styling.
 - **Backend**: Node.js and Express.js for building the API.
 - **Authentication**: JWT (JSON Web Tokens) for secure authentication.
 - **Database**: MongoDB for storing application data.
@@ -32,7 +32,7 @@ Follow these instructions to get the CocoTracker frontend up and running on your
 1. Clone the repository:
 
    ```bash
-   git clone https://yashmodi9998/Cocotracker-frontend/cocotracker-frontend.git
+   git clone https://yashmodi9998/Cocotracker-frontend.git
    ```
 
 2. Navigate into the project directory:
