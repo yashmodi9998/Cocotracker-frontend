@@ -1,4 +1,4 @@
-# CocoTracker - Coconut Juice Inventory Management System
+# CocoTracker - Coconut Juice Inventory
 
 CocoTracker is a web application designed to simplify how small businesses handle their coconut juice inventory. It helps businesses track inventory levels, manage storage locations, and monitor daily sales of coconut juice.
 
