@@ -5,7 +5,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
-import Logout from './pages/Logout'
+import User from './pages/User'
 
 function App() {
 
@@ -19,9 +19,7 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
-        <Route path="/logout" element={<Logout/>}/>
-        
-      
+        <Route path="/user" element={<User/>}/>
         </Routes>
         <Footer/>
         </BrowserRouter>

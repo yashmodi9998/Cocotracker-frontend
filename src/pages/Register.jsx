@@ -24,8 +24,11 @@ const Register = () => {
         // get response from backend with register endpoint
       const response = await axios.post('http://localhost:8888/register', formData);
     //   set response in token and store it in localstorage
-      const { token } = response.data;
+      const { token,name,role } = response.data;
       localStorage.setItem('token', token);
+      localStor
+      age.setItem('name', name);
+      localStorage.setItem('role', role);
     //   redirect to home page
       window.location.href = '/';
     //   alert('Registration successful!');
@@ -36,31 +39,71 @@ const Register = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Name:</label>
-        <input type="text" name="name" onChange={handleChange} value={formData.name} required />
+ <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-xl">
+      <div className="mb-4">
+        <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          onChange={handleChange}
+          value={formData.name}
+          required
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
       </div>
-      <div>
-        <label>Email:</label>
-        <input type="email" name="email" onChange={handleChange} value={formData.email} required />
+      <div className="mb-4">
+        <label htmlFor="email" className="block text-gray-700 font-bold mb-2">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          onChange={handleChange}
+          value={formData.email}
+          required
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
       </div>
-      <div>
-        <label>Phone Number:</label>
-        <input type="text" name="phoneNumber" onChange={handleChange} value={formData.phoneNumber} />
+      <div className="mb-4">
+        <label htmlFor="phoneNumber" className="block text-gray-700 font-bold mb-2">Phone Number:</label>
+        <input
+          type="text"
+          id="phoneNumber"
+          name="phoneNumber"
+          onChange={handleChange}
+          value={formData.phoneNumber}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
       </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" name="password" onChange={handleChange} value={formData.password} required />
+      <div className="mb-4">
+        <label htmlFor="password" className="block text-gray-700 font-bold mb-2">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          onChange={handleChange}
+          value={formData.password}
+          required
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
       </div>
-      <div>
-        <label>Role:</label>
-        <select name="role" onChange={handleChange} value={formData.role} required>
+      <div className="mb-6">
+        <label htmlFor="role" className="block text-gray-700 font-bold mb-2">Role:</label>
+        <select
+          id="role"
+          name="role"
+          onChange={handleChange}
+          value={formData.role}
+          required
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        >
           <option value="admin">Admin</option>
           <option value="kiosk owner">Kiosk Owner</option>
         </select>
       </div>
-      <button type="submit">Register</button>
+      <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">
+        Register
+      </button>
     </form>
   );
 };
