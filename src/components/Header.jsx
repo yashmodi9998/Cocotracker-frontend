@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Header = () => {
-  const isLoggedIn =localStorage.getItem('token');
-const userRole = localStorage.getItem('role');
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown visibility
+  const isLoggedIn = localStorage.getItem('token');
+  const userRole = localStorage.getItem('role');
+  const userName = localStorage.getItem('name');
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove token from localStorage
+    window.location.href = '/'; // Redirect to home page
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen); // Toggle dropdown visibility
+  };
+
   return (
     <header id="header">
       <nav className="bg-gray-800 text-white">
         <div className="container mx-auto py-4 px-6 md:flex md:items-center md:justify-between">
           <div className="flex items-center justify-between">
-               <NavLink to="/" className="text-xl font-semibold">
+            <NavLink to="/" className="text-xl font-semibold">
               <span className="text-gray-300">Coco</span>
               <span className="text-gray-100">Tracker</span>
             </NavLink>
@@ -25,27 +37,14 @@ const userRole = localStorage.getItem('role');
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
               </svg>
             </button>
           </div>
           <div className="hidden md:flex md:items-center md:space-x-4">
-            {/* if user is not logged in */}
-          {!isLoggedIn ? (
-              <><NavLink
-              className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-              activeClassName="bg-gray-900"
-              exact
-              to="/"
-            >
-              
-            </NavLink>
-            
+            {!isLoggedIn ? (
+              <>
+             
                 <NavLink
                   className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
                   to="/register"
@@ -59,33 +58,49 @@ const userRole = localStorage.getItem('role');
                   Log in
                 </NavLink>
               </>
-            ) : 
-            // if user is logged in
-            (
-              <> 
-                   
-               {/* if user role is admin, show dashboard link */}
-               {userRole === 'admin' && (
+            ) : (
+              <>
+                {userRole === 'admin' && (
                   <NavLink
                     className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
                     to="/user"
                   >
-                    User
+                    Users
                   </NavLink>
-                )} 
-{/* logout  */}
-            <button
-                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium"
-                onClick={() => {
-                  // remove token for logout.
-                  localStorage.removeItem('token');
-                  window.location.href = '/';
-                }}
-              >
-                Log Out
-              </button>
+                )}
+                <div className="relative">
+                  <button
+                    className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                    onClick={toggleDropdown}
+                  >
+                    {userName}
+                    <svg
+                      className="w-4 h-4 ml-1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  {dropdownOpen && (
+                    <ul className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg z-10">
+                      <li>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  )}
+                </div>
               </>
-
             )}
           </div>
         </div>

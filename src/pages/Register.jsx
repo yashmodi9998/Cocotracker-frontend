@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Register = () => {
+  const url = import.meta.env.VITE_BACKEND_URL;
     // constants for register form fields
   const [formData, setFormData] = useState({
     name: '',
@@ -22,7 +23,7 @@ const Register = () => {
     e.preventDefault();
     try {
         // get response from backend with register endpoint
-      const response = await axios.post('http://localhost:8888/register', formData);
+      const response = await axios.post(`${url}/register`, formData);
     //   set response in token and store it in localstorage
       const { token,name,role } = response.data;
       localStorage.setItem('token', token);

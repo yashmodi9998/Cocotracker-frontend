@@ -4,6 +4,7 @@ import EditUser from '../components/EditUser';
 import DeleteUser from '../components/DeleteUser';
 
 const User = () => {
+  const url = import.meta.env.VITE_BACKEND_URL;
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [editUser, setEditUser] = useState(null); // State to hold the user being edited
@@ -26,7 +27,7 @@ const User = () => {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:8888/', {
+        const response = await axios.get(`${url}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -68,7 +69,7 @@ const User = () => {
 
 
       // Send PUT request to update user
-      await axios.put(`http://localhost:8888/${editUser._id}`, formData, {
+      await axios.put(`${url}/${editUser._id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -98,7 +99,7 @@ const User = () => {
  
 
       // Send DELETE request to delete user
-      await axios.delete(`http://localhost:8888/${deleteUser._id}`, {
+      await axios.delete(`${url}/${deleteUser._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -109,7 +110,7 @@ const User = () => {
       setUsers(updatedUsers);
       setDeleteUser(null); // Reset delete state
     } catch (error) {
-      setError('Failed to delete user');
+      setError('Failed to delete user'+error);
     }
   };
   return (

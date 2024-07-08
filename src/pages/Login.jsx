@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 const Login = () => {
+  const url = import.meta.env.VITE_BACKEND_URL;
     // initial value for form data and setFormData
   const [formData, setFormData] = useState({
     email: '',
@@ -17,10 +19,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const url = process.env.REACT_APP_BACKEND_URL
-      // console.log("snhdsjdfh"+url);
+      
         // post request for login with axios
-      const response = await axios.post('http://localhost:8888/login', formData);
+      const response = await axios.post(`${url}/login`, formData);
     //   store token as a response and store it in localstorage as token
       const { token,role,name } = response.data;
       console.log(response.data);
