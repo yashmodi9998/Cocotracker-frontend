@@ -44,7 +44,6 @@ const Header = () => {
           <div className="hidden md:flex md:items-center md:space-x-4">
             {!isLoggedIn ? (
               <>
-             
                 <NavLink
                   className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
                   to="/register"
@@ -61,11 +60,33 @@ const Header = () => {
             ) : (
               <>
                 {userRole === 'admin' && (
+                  <>
+                    <NavLink
+                      className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                      to="/user"
+                    >
+                      Users
+                    </NavLink>
+                    <NavLink
+                      className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                      to="/manage-return-requests"
+                    >
+                      Return Requests
+                    </NavLink>
+                    <NavLink
+                      className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                      to="/manage-stock"
+                    >
+                    Stock
+                    </NavLink>
+                  </>
+                )}
+                {userRole === 'kiosk owner' && (
                   <NavLink
                     className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-                    to="/user"
+                    to="/allocated-stock"
                   >
-                    Users
+                     Stock
                   </NavLink>
                 )}
                 <div className="relative">
@@ -82,7 +103,7 @@ const Header = () => {
                     >
                       <path
                         fillRule="evenodd"
-                        d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                         clipRule="evenodd"
                       />
                     </svg>

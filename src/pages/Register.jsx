@@ -25,9 +25,11 @@ const Register = () => {
         // get response from backend with register endpoint
       const response = await axios.post(`${url}/register`, formData);
     //   set response in token and store it in localstorage
-      const { token,name,role } = response.data;
+      const { token,name,role,email,id } = response.data;
       localStorage.setItem('token', token);
-      localStor
+     
+      localStorage.setItem('id', id);
+      localStorage.setItem('email', email);
       age.setItem('name', name);
       localStorage.setItem('role', role);
     //   redirect to home page
