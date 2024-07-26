@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import axios from 'axios';
 import EditUser from '../components/EditUser';
 import DeleteUser from '../components/DeleteUser';
@@ -39,7 +39,7 @@ const User = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [url,token]);
 
   // Function to handle edit button click
   const handleEditClick = (user) => {

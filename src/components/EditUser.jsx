@@ -1,5 +1,4 @@
-import React from 'react';
-
+import PropTypes from 'prop-types';
 const EditUser = ({ isOpen, title, closeModal, handleSubmit, formData, handleChange }) => {
   if (!isOpen) return null;
 
@@ -50,5 +49,17 @@ const EditUser = ({ isOpen, title, closeModal, handleSubmit, formData, handleCha
     </div>
   );
 };
-
+EditUser.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  formData: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    phoneNumber: PropTypes.string,
+    role: PropTypes.string,
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
 export default EditUser;

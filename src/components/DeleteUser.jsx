@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 const DeleteUser = ({ isOpen, title, closeModal, handleDelete }) => {
   if (!isOpen) return null;
@@ -26,5 +26,10 @@ const DeleteUser = ({ isOpen, title, closeModal, handleDelete }) => {
     </div>
   );
 };
-
+DeleteUser.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+};
 export default DeleteUser;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  React,{ useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Stocks = () => {
@@ -11,14 +11,14 @@ const Stocks = () => {
   const [returnRequests, setReturnRequests] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAllocation, setSelectedAllocation] = useState(null);
-  const [expandedRow, setExpandedRow] = useState(null); 
-
+  const [expandedRow, setExpandedRow] = useState(null);
 
   useEffect(() => {
-        if (!token) {
+    if (!token) {
       window.location.href = '/login';
       return;
     }
+
     const fetchAllocations = async () => {
       try {
         const response = await axios.get(`${url}/allocate-stock/${userId}`, {
@@ -28,6 +28,7 @@ const Stocks = () => {
         });
         setAllocations(response.data);
       } catch (error) {
+        console.error('Error fetching allocated stock:', error);
         setError('Failed to fetch allocated stock');
       }
     };
@@ -41,25 +42,27 @@ const Stocks = () => {
         });
         const requests = {};
         response.data.forEach((request) => {
-          requests[request.stockAllocationId] = request;
+          requests[request.stockAllocationId._id] = request;
         });
+       
         setReturnRequests(requests);
       } catch (error) {
+        console.error('Error fetching return requests:', error);
         setError('Failed to fetch return requests');
       }
     };
 
     fetchAllocations();
     fetchReturnRequests();
-  }, [userId, url]);
+  }, [userId, url, token]);
 
-  const handleReturnRequest = async (stockAllocationId, remainingStock, reason) => {
+  const handleReturnRequest = async (stockAllocationId, returningStock, reason) => {
     try {
       await axios.post(
         `${url}/return-request`,
         {
           stockAllocationId,
-          remainingStock,
+          returningStock,
           reason,
         },
         {
@@ -68,7 +71,18 @@ const Stocks = () => {
           },
         }
       );
+  
       // Fetch return requests again to update the UI
+      await updateReturnRequests();
+      setIsModalOpen(false); // Close modal after submission
+    } catch (error) {
+      console.error('Error submitting return request:', error);
+      setError('Failed to submit return request'+error);
+    }
+  };
+
+  const updateReturnRequests = async () => {
+    try {
       const response = await axios.get(`${url}/return-requests/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -79,9 +93,9 @@ const Stocks = () => {
         requests[request.stockAllocationId] = request;
       });
       setReturnRequests(requests);
-      setIsModalOpen(false); // Close modal after submission
     } catch (error) {
-      setError('Failed to submit return request');
+      console.error('Error updating return requests:', error);
+      setError('Failed to fetch return requests');
     }
   };
 
@@ -91,6 +105,7 @@ const Stocks = () => {
   };
 
   const closeModal = () => {
+    
     setIsModalOpen(false);
     setSelectedAllocation(null);
   };
@@ -130,14 +145,17 @@ const Stocks = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {allocations.map((allocation) => (
               <React.Fragment key={allocation._id}>
-                <tr className={returnRequests[allocation._id] ? 'cursor-pointer' : ''} onClick={() => handleRowClick(allocation._id)}>
+                <tr
+                  className={returnRequests[allocation._id] ? 'cursor-pointer' : ''}
+                  onClick={() => handleRowClick(allocation._id)}
+                >
                   <td className="py-4 px-6 border-b border-gray-200">
                     {allocation.kioskOwnerId ? allocation.kioskOwnerId.name : 'Unknown'}
                   </td>
                   <td className="py-4 px-6 border-b border-gray-200">{allocation.allocatedStock}</td>
                   <td className="py-4 px-6 border-b border-gray-200">{new Date(allocation.dateAllocated).toLocaleDateString()}</td>
                   <td className="py-4 px-6 border-b border-gray-200">
-                    {returnRequests[allocation._id] ? (
+                    {returnRequests[allocation._id] && returnRequests[allocation._id].status ? (
                       <span className={`inline-flex items-center px-3 py-1 text-xs font-medium rounded-full ${statusBadgeClass(returnRequests[allocation._id].status)}`}>
                         {returnRequests[allocation._id].status}
                       </span>
@@ -170,7 +188,7 @@ const Stocks = () => {
                   <tr>
                     <td colSpan="5" className="py-4 px-6 border-b border-gray-200">
                       <div>
-                        <p><strong>Number of Returned Stock:</strong> {returnRequests[allocation._id].remainingStock}</p>
+                        <p><strong>Number of Returned Stock:</strong> {returnRequests[allocation._id].returningStock}</p>
                         <p><strong>Reason:</strong> {returnRequests[allocation._id].reason}</p>
                         <p><strong>Status:</strong> <span className={`inline-flex items-center px-3 py-1 text-xs font-medium rounded-full ${statusBadgeClass(returnRequests[allocation._id].status)}`}>
                           {returnRequests[allocation._id].status}
@@ -199,19 +217,19 @@ const Stocks = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                const remainingStock = e.target.elements.remainingStock.value;
-                const reason = e.target.elements.reason.value;
-                handleReturnRequest(selectedAllocation._id, remainingStock, reason);
+                const returningStock = e.target.returningStock.value;
+                const reason = e.target.reason.value;
+                handleReturnRequest(selectedAllocation._id, returningStock, reason);
               }}
             >
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                  Number of Stock to Return
+                  Number of Returning Stock
                 </label>
                 <input
                   type="number"
-                  name="remainingStock"
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  name="returningStock"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
                 />
               </div>
@@ -221,16 +239,18 @@ const Stocks = () => {
                 </label>
                 <textarea
                   name="reason"
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
                 />
               </div>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded-md"
-              >
-                Submit
-              </button>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white py-2 px-4 rounded-md"
+                >
+                  Submit
+                </button>
+              </div>
             </form>
           </div>
         </div>

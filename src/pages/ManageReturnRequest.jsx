@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const ManageReturnRequest = () => {
@@ -96,7 +96,7 @@ const ManageReturnRequest = () => {
                 <td className="py-4 px-6 border-b border-gray-200">
                   {request.stockAllocationId && request.stockAllocationId.kioskOwnerId ? request.stockAllocationId.kioskOwnerId.name : 'Unknown'}
                 </td>
-                <td className="py-4 px-6 border-b border-gray-200">{request.remainingStock}</td>
+                <td className="py-4 px-6 border-b border-gray-200">{request.returningStock}</td>
                 <td className="py-4 px-6 border-b border-gray-200">{request.reason}</td>
                 <td className="py-4 px-6 border-b border-gray-200">{formatDate(request.dateRequested)}</td>
                 <td className="py-4 px-6 border-b border-gray-200">

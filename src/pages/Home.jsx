@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Home = () => {
@@ -57,7 +57,7 @@ const Home = () => {
     };
     fetchSales();
     fetchStores();
-  }, []);
+  }, [url]);
 
   const userRole = localStorage.getItem('role'); 
   // Function to filter sales data based on user role

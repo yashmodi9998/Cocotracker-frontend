@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 const Register = () => {
@@ -30,14 +30,12 @@ const Register = () => {
      
       localStorage.setItem('id', id);
       localStorage.setItem('email', email);
-      age.setItem('name', name);
+      localStorage.setItem('name', name);
       localStorage.setItem('role', role);
     //   redirect to home page
       window.location.href = '/';
-    //   alert('Registration successful!');
     } catch (error) {
       console.error(error);
-    //   alert('Registration failed');
     }
   };
 
