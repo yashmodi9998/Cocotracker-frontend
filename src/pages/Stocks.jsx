@@ -1,24 +1,31 @@
-import  React,{ useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loader from '../components/Loader'; // Import the Loader component
 
 const Stocks = () => {
+  // Retrieve user ID and token from local storage
   const userId = localStorage.getItem('id');
   const token = localStorage.getItem('token');
   const url = import.meta.env.VITE_BACKEND_URL;
 
+  // State variables
   const [allocations, setAllocations] = useState([]);
   const [error, setError] = useState('');
   const [returnRequests, setReturnRequests] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAllocation, setSelectedAllocation] = useState(null);
   const [expandedRow, setExpandedRow] = useState(null);
+  const [loading, setLoading] = useState(true); // State for loading
 
+  // Fetch allocations and return requests on component mount
   useEffect(() => {
+    // Redirect to login if token is not available
     if (!token) {
       window.location.href = '/login';
       return;
     }
 
+    // Fetch allocations for the current user
     const fetchAllocations = async () => {
       try {
         const response = await axios.get(`${url}/allocate-stock/${userId}`, {
@@ -33,6 +40,7 @@ const Stocks = () => {
       }
     };
 
+    // Fetch return requests for the current user
     const fetchReturnRequests = async () => {
       try {
         const response = await axios.get(`${url}/return-requests/${userId}`, {
@@ -44,7 +52,6 @@ const Stocks = () => {
         response.data.forEach((request) => {
           requests[request.stockAllocationId._id] = request;
         });
-       
         setReturnRequests(requests);
       } catch (error) {
         console.error('Error fetching return requests:', error);
@@ -52,10 +59,15 @@ const Stocks = () => {
       }
     };
 
-    fetchAllocations();
-    fetchReturnRequests();
+    const fetchData = async () => {
+      await Promise.all([fetchAllocations(), fetchReturnRequests()]);
+      setLoading(false); // Set loading to false after both fetches
+    };
+
+    fetchData();
   }, [userId, url, token]);
 
+  // Handle return request submission
   const handleReturnRequest = async (stockAllocationId, returningStock, reason) => {
     try {
       await axios.post(
@@ -71,16 +83,17 @@ const Stocks = () => {
           },
         }
       );
-  
-      // Fetch return requests again to update the UI
+
+      // Update return requests after submission
       await updateReturnRequests();
       setIsModalOpen(false); // Close modal after submission
     } catch (error) {
       console.error('Error submitting return request:', error);
-      setError('Failed to submit return request'+error);
+      setError('Failed to submit return request' + error);
     }
   };
 
+  // Update return requests from the server
   const updateReturnRequests = async () => {
     try {
       const response = await axios.get(`${url}/return-requests/${userId}`, {
@@ -99,33 +112,40 @@ const Stocks = () => {
     }
   };
 
+  // Open modal for submitting a return request
   const openModal = (allocation) => {
     setSelectedAllocation(allocation);
     setIsModalOpen(true);
   };
 
+  // Close modal
   const closeModal = () => {
-    
     setIsModalOpen(false);
     setSelectedAllocation(null);
   };
 
+  // Handle row click to expand or collapse the row details
   const handleRowClick = (allocationId) => {
     setExpandedRow(expandedRow === allocationId ? null : allocationId);
   };
 
+  // Determine badge class based on status
   const statusBadgeClass = (status) => {
     switch (status) {
-      case 'Pending':
+      case 'pending':
         return 'bg-yellow-100 text-yellow-800';
-      case 'Approved':
+      case 'approved':
         return 'bg-green-100 text-green-800';
-      case 'Rejected':
+      case 'rejected':
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
+
+  if (loading) {
+    return <Loader />; // Show loader while data is being fetched
+  }
 
   return (
     <div className="container mx-auto mt-10">

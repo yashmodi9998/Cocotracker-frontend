@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loader from '../components/Loader'; 
 
 const Home = () => {
   const url = import.meta.env.VITE_BACKEND_URL;
@@ -7,6 +8,8 @@ const Home = () => {
   const [sales, setSales] = useState([]);
   // to set error
   const [error, setError] = useState('');
+  // to manage loading state
+  const [loading, setLoading] = useState(true);
   // modal for record sales
   const [showModal, setShowModal] = useState(false);
   // to set new sales data
@@ -19,7 +22,6 @@ const Home = () => {
   // to store stores data
   const [stores, setStores] = useState([]);
   
-    
   useEffect(() => {
     // store token from local storage
     const token = localStorage.getItem('token');
@@ -39,6 +41,8 @@ const Home = () => {
         setSales(response.data);
       } catch (error) {
         setError('Failed to fetch sales data');
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
     // method that store stores data
@@ -50,7 +54,6 @@ const Home = () => {
           },
         });
         setStores(response.data);
-       
       } catch (error) {
         setError('Failed to fetch store data');
       }
@@ -71,7 +74,6 @@ const Home = () => {
   };
 
   const filteredSales = filterSalesData(sales);
-
 
   // method for handling input changes
   const handleChange = (e) => {
@@ -104,6 +106,7 @@ const Home = () => {
       setError('Failed to add new sale');
     }
   };
+
   return (
     <div className="container mx-auto mt-10">
       <h1 className="text-2xl font-bold mb-4">Sales Data</h1>
@@ -115,7 +118,9 @@ const Home = () => {
           Add New Record
         </button>
       )}
-      {error ? (
+      {loading ? (
+        <Loader /> // Render the loader while loading
+      ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
         <div className="overflow-x-auto">

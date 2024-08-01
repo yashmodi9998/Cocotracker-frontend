@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loader from '../components/Loader'; // Import the Loader component for displaying loading animation
 
 const ManageReturnRequest = () => {
-  const token = localStorage.getItem('token');
-  const url = import.meta.env.VITE_BACKEND_URL;
-  const [returnRequests, setReturnRequests] = useState([]);
-  const [error, setError] = useState('');
+  const token = localStorage.getItem('token'); // Retrieve token from local storage
+  const url = import.meta.env.VITE_BACKEND_URL; // Backend URL from environment variables
+  const [returnRequests, setReturnRequests] = useState([]); // State for storing return requests
+  const [error, setError] = useState(''); // State for storing error messages
+  const [loading, setLoading] = useState(true); // State for loading
 
+  // Fetch return requests when the component mounts
   useEffect(() => {
     if (!token) {
-      window.location.href = '/login';
+      window.location.href = '/login'; // Redirect to login if token is not available
       return;
     }
 
@@ -18,21 +21,24 @@ const ManageReturnRequest = () => {
         const response = await axios.get(`${url}/return-requests`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("data", response.data);
-        setReturnRequests(response.data);
+        setReturnRequests(response.data); // Update state with fetched data
       } catch (error) {
-        setError('Failed to fetch return requests: ');
+        setError('Failed to fetch return requests: ' + (error.response?.data?.message || error.message));
+      } finally {
+        setLoading(false); // Set loading to false after data fetching
       }
     };
 
     fetchReturnRequests();
   }, [url, token]);
 
+  // Handle approval of a return request
   const handleApproval = async (requestId) => {
     try {
       await axios.put(`${url}/approve-return-request/${requestId}`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      // Fetch updated return requests after approval
       const response = await axios.get(`${url}/return-requests`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -42,11 +48,13 @@ const ManageReturnRequest = () => {
     }
   };
 
+  // Handle rejection of a return request
   const handleRejection = async (requestId) => {
     try {
       await axios.delete(`${url}/return-request/${requestId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      // Fetch updated return requests after rejection
       const response = await axios.get(`${url}/return-requests`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -56,11 +64,13 @@ const ManageReturnRequest = () => {
     }
   };
 
+  // Format date string to a more readable format
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  // Get CSS class for status badge based on the status value
   const statusBadgeClass = (status) => {
     switch (status) {
       case 'pending':
@@ -74,10 +84,14 @@ const ManageReturnRequest = () => {
     }
   };
 
+  if (loading) {
+    return <Loader />; // Show loader while data is being fetched
+  }
+
   return (
     <div className="container mx-auto mt-10">
       <h1 className="text-2xl font-bold mb-4">Manage Return Requests</h1>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500">{error}</p>} {/* Display error message if any */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
