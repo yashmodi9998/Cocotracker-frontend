@@ -1,36 +1,32 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Loader from '../components/Loader'; 
+import Loader from '../components/Loader';
 
 const Home = () => {
   const url = import.meta.env.VITE_BACKEND_URL;
-  // to store sales data
-  const [sales, setSales] = useState([]);
-  // to set error
-  const [error, setError] = useState('');
-  // to manage loading state
-  const [loading, setLoading] = useState(true);
-  // modal for record sales
-  const [showModal, setShowModal] = useState(false);
-  // to set new sales data
+  const [sales, setSales] = useState([]); // State to store sales data
+  const [error, setError] = useState(''); // State to store error messages
+  const [loading, setLoading] = useState(true); // State to manage loading indicator
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const [newSale, setNewSale] = useState({
     date: '',
     storeName: '',
     kioskOwner: localStorage.getItem('name'), // Default to current user
     quantitySold: '',
+    stockAllocationId: '', // ID of selected stock allocation
   });
-  // to store stores data
-  const [stores, setStores] = useState([]);
-  
+  const [stores, setStores] = useState([]); // State to store store data
+  const [allocations, setAllocations] = useState([]); // State to store stock allocations
+
   useEffect(() => {
-    // store token from local storage
     const token = localStorage.getItem('token');
-    // check for logged in user
     if (!token) {
+      // Redirect to login if token is not present
       window.location.href = '/login';
       return;
     }
-    // method that store sales data
+
+    // Function to fetch sales data
     const fetchSales = async () => {
       try {
         const response = await axios.get(`${url}/sales`, {
@@ -38,14 +34,15 @@ const Home = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setSales(response.data);
+        setSales(response.data); // Set sales data
       } catch (error) {
-        setError('Failed to fetch sales data');
+        setError('Failed to fetch sales data'); // Set error message
       } finally {
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false); // Turn off loading indicator
       }
     };
-    // method that store stores data
+
+    // Function to fetch store data
     const fetchStores = async () => {
       try {
         const response = await axios.get(`${url}/stores`, {
@@ -53,29 +50,46 @@ const Home = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setStores(response.data);
+        setStores(response.data); // Set store data
       } catch (error) {
-        setError('Failed to fetch store data');
+        setError('Failed to fetch store data'); // Set error message
       }
     };
+
+    // Function to fetch stock allocations
+    const fetchAllocations = async () => {
+      try {
+        const response = await axios.get(`${url}/allocate-stock`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAllocations(response.data); // Set allocations
+      } catch (error) {
+        setError('Failed to fetch stock allocations'); // Set error message
+      }
+    };
+
     fetchSales();
     fetchStores();
+    fetchAllocations();
   }, [url]);
 
-  const userRole = localStorage.getItem('role'); 
+  const userRole = localStorage.getItem('role');
+
   // Function to filter sales data based on user role
   const filterSalesData = (salesData) => {
     if (userRole === 'admin') {
       return salesData; // Return all sales data for admin
     } else {
-      const kioskOwner = localStorage.getItem('name'); // Assuming username or kiosk owner info is stored in localStorage
-      return salesData.filter(sale => sale.kioskOwner === kioskOwner);
+      const kioskOwner = localStorage.getItem('name'); // Get current user name
+      return salesData.filter(sale => sale.kioskOwner === kioskOwner); // Filter sales data for kiosk owner
     }
   };
 
   const filteredSales = filterSalesData(sales);
 
-  // method for handling input changes
+  // Function to handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewSale((prevState) => ({
@@ -84,7 +98,7 @@ const Home = () => {
     }));
   };
 
-  // method for handling form submit
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -94,16 +108,17 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setSales([...sales, response.data]);
-      setShowModal(false);
+      setSales([...sales, response.data]); // Add new sale to sales list
+      setShowModal(false); // Hide modal
       setNewSale({
         date: '',
         storeName: '',
         kioskOwner: localStorage.getItem('name'),
         quantitySold: '',
-      });
+        stockAllocationId: '',
+      }); // Reset form fields
     } catch (error) {
-      setError('Failed to add new sale');
+      setError('Failed to add new sale: ' + error.message); // Set error message
     }
   };
 
@@ -121,7 +136,7 @@ const Home = () => {
       {loading ? (
         <Loader /> // Render the loader while loading
       ) : error ? (
-        <p className="text-red-500">{error}</p>
+        <p className="text-red-500">{error}</p> // Display error message if any
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -132,6 +147,7 @@ const Home = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kiosk Owner</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity Sold</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Allocated Stock</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -142,6 +158,10 @@ const Home = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{sale.kioskOwner}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{sale.quantitySold} L</td>
                   <td className="px-6 py-4 whitespace-nowrap">{sale.quantitySold * 60} rupees</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {/* Display allocated stock based on allocation ID */}
+                    {allocations.find(allocation => allocation._id === sale.stockAllocationId)?.allocatedStock || 'N/A'} L
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -192,19 +212,36 @@ const Home = () => {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
-              <div>
-                <button
-                  type="submit"
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-2"
+              <div className="mb-4">
+                <label htmlFor="stockAllocationId" className="block text-sm font-medium text-gray-700">Stock Allocation</label>
+                <select
+                  id="stockAllocationId"
+                  name="stockAllocationId"
+                  value={newSale.stockAllocationId}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 >
-                  Save
-                </button>
+                  <option value="">Select an allocation</option>
+                  {allocations.map(allocation => (
+                    <option key={allocation._id} value={allocation._id}>
+                      {`${allocation.allocatedStock} L`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-700 bg-gray-300 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="px-4 py-2 font-medium text-xs text-white bg-red-600 rounded-md hover:bg-red-500 mr-2"
                 >
                   Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 font-medium text-xs text-white bg-blue-600 rounded-md hover:bg-blue-500"
+                >
+                  Add Sale
                 </button>
               </div>
             </form>

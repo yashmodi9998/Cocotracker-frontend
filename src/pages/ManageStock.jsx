@@ -49,7 +49,7 @@ const ManageStock = () => {
     // Function to fetch kiosk owners
     const fetchKioskOwners = async () => {
       try {
-        const response = await axios.get(`${url}/users`, {
+        const response = await axios.get(`${url}/`, {
           headers: {
             Authorization: `Bearer ${token}`, // Add token to request headers
           },
