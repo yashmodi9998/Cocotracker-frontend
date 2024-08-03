@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-
+import logo from './../../public/LOGO.png';
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown visibility
   const isLoggedIn = localStorage.getItem('token');
@@ -22,8 +22,7 @@ const Header = () => {
         <div className="container mx-auto py-4 px-6 md:flex md:items-center md:justify-between">
           <div className="flex items-center justify-between">
             <NavLink to="/" className="text-xl font-semibold">
-              <span className="text-gray-300">Coco</span>
-              <span className="text-gray-100">Tracker</span>
+            <img src={logo} alt="CocoTracker Logo" className="h-10 w-auto" />
             </NavLink>
             <button
               className="md:hidden rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 p-2"
