@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ element, requiredRole }) => {
-  const isLoggedIn = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('role');
 
-  if (!isLoggedIn) {
+  if (!token) {
     return <Navigate to="/login" />;
   }
 

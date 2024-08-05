@@ -3,8 +3,11 @@ import axios from 'axios';
 import Loader from '../components/Loader'; // Import the Loader component for displaying loading animation
 
 const ManageReturnRequest = () => {
-  const token = localStorage.getItem('token'); // Retrieve token from local storage
+  
   const url = import.meta.env.VITE_BACKEND_URL; // Backend URL from environment variables
+  //fetch data from localStorage
+  const token = localStorage.getItem('token'); 
+  // state variables
   const [returnRequests, setReturnRequests] = useState([]); // State for storing return requests
   const [error, setError] = useState(''); // State for storing error messages
   const [loading, setLoading] = useState(true); // State for loading
@@ -30,7 +33,7 @@ const ManageReturnRequest = () => {
     };
 
     fetchReturnRequests();
-  }, [url, token]);
+  }, [url]);
 
   // Handle approval of a return request
   const handleApproval = async (requestId) => {
@@ -60,17 +63,17 @@ const ManageReturnRequest = () => {
       });
       setReturnRequests(response.data);
     } catch (error) {
-      setError('Failed to reject return request: ' + (error.response?.data?.message || error.message));
+      setError('Failed to reject return request: ' + (error.message));
     }
   };
 
-  // Format date string to a more readable format
+  // Format date string to a readable format
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // Get CSS class for status badge based on the status value
+  // to use CSS class for status badge based on the status value
   const statusBadgeClass = (status) => {
     switch (status) {
       case 'pending':
@@ -119,6 +122,7 @@ const ManageReturnRequest = () => {
                   </span>
                 </td>
                 <td className="py-4 px-6 border-b border-gray-200">
+                  {/* check if request is still in pending state */}
                   {request.status === 'pending' && (
                     <>
                       <button

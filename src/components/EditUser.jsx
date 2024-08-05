@@ -49,6 +49,7 @@ const EditUser = ({ isOpen, title, closeModal, handleSubmit, formData, handleCha
     </div>
   );
 };
+// fixed due to resolve lint propTypes
 EditUser.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,

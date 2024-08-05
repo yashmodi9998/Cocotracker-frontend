@@ -3,11 +3,10 @@ import axios from 'axios';
 import Loader from '../components/Loader'; // Import the Loader component
 
 const Stocks = () => {
-  // Retrieve user ID and token from local storage
+  const url = import.meta.env.VITE_BACKEND_URL; // Backend URL from environment variables
+  // fetch data from local storage
   const userId = localStorage.getItem('id');
   const token = localStorage.getItem('token');
-  const url = import.meta.env.VITE_BACKEND_URL;
-
   // State variables
   const [allocations, setAllocations] = useState([]);
   const [error, setError] = useState('');
@@ -17,15 +16,15 @@ const Stocks = () => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [loading, setLoading] = useState(true); // State for loading
 
-  // Fetch allocations and return requests on component mount
+ 
   useEffect(() => {
     // Redirect to login if token is not available
     if (!token) {
       window.location.href = '/login';
       return;
     }
-
-    // Fetch allocations for the current user
+  
+    // Fetch allocations for the logged-in user 
     const fetchAllocations = async () => {
       try {
         const response = await axios.get(`${url}/allocate-stock/${userId}`, {
@@ -39,8 +38,8 @@ const Stocks = () => {
         setError('Failed to fetch allocated stock');
       }
     };
-
-    // Fetch return requests for the current user
+  
+    // Fetch return requests for the logged-in user
     const fetchReturnRequests = async () => {
       try {
         const response = await axios.get(`${url}/return-requests/${userId}`, {
@@ -58,14 +57,18 @@ const Stocks = () => {
         setError('Failed to fetch return requests');
       }
     };
-
+  
     const fetchData = async () => {
-      await Promise.all([fetchAllocations(), fetchReturnRequests()]);
+      // Fetch allocations first
+      await fetchAllocations();
+      // Fetch return requests after allocations are fetched
+      await fetchReturnRequests();
       setLoading(false); // Set loading to false after both fetches
     };
-
+  
     fetchData();
-  }, [userId, url, token]);
+  }, []);
+  
 
   // Handle return request submission
   const handleReturnRequest = async (stockAllocationId, returningStock, reason) => {

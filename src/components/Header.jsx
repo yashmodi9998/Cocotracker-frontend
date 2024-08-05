@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import logo from './../../public/LOGO.png';
+import logo from '/LOGO.png';
 const Header = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown visibility
-  const isLoggedIn = localStorage.getItem('token');
+  
+  const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('role');
   const userName = localStorage.getItem('name');
 
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown visibility
   const handleLogout = () => {
     localStorage.removeItem('token'); // Remove token from localStorage
-    window.location.href = '/'; // Redirect to home page
+    window.location.href = '/login'; // Redirect to home page
   };
 
   const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen); // Toggle dropdown visibility
+    setDropdownOpen(!dropdownOpen); // Toggle dropdown 
   };
 
   return (
@@ -41,7 +42,7 @@ const Header = () => {
             </button>
           </div>
           <div className="hidden md:flex md:items-center md:space-x-4">
-            {!isLoggedIn ? (
+            {!token ? (
               <>
                 <NavLink
                   className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"

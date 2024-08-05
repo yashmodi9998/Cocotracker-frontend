@@ -20,21 +20,19 @@ const Login = () => {
     e.preventDefault();
     try {
       
-        // post request for login with axios
+    // post request for login with axios
       const response = await axios.post(`${url}/login`, formData);
-    //   store token as a response and store it in localstorage as token
+    //store token as a response and store it in localstorage as token
       const { token,role,name,email,id } = response.data;
-      console.log(response.data);
+    //to set user details to local storage
       localStorage.setItem('token', token);
       localStorage.setItem('name', name);
       localStorage.setItem('role', role);
       localStorage.setItem('id', id);
       localStorage.setItem('email', email);
 
-    //   redirects to home route after login
+    //redirects to home route after login
       window.location.href = '/';
-    //   console.log(token);
-    //   alert('Login successful!');
     } catch (error) {
       console.error(error);
       // alert(error);

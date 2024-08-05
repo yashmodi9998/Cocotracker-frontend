@@ -26,6 +26,7 @@ const DeleteUser = ({ isOpen, title, closeModal, handleDelete }) => {
     </div>
   );
 };
+// fixed due to resolve lint propTypes
 DeleteUser.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,

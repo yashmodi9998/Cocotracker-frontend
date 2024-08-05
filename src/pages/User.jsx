@@ -5,13 +5,16 @@ import DeleteUser from '../components/DeleteUser';
 import Loader from '../components/Loader'; 
 
 const User = () => {
-  const url = import.meta.env.VITE_BACKEND_URL;
+  const url = import.meta.env.VITE_BACKEND_URL; // Backend URL from environment variables
+  //fetch data from localStorage
+  const token = localStorage.getItem('token'); 
+  // state variables
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true); // State to manage loading status
   const [error, setError] = useState('');
   const [editUser, setEditUser] = useState(null); // State to hold the user being edited
   const [deleteUser, setDeleteUser] = useState(null); // State to hold the user to be deleted
-  const token = localStorage.getItem('token');
+ 
   // State to manage form data for editing
   const [formData, setFormData] = useState({
     name: '',

@@ -3,6 +3,10 @@ import axios from 'axios';
 import Loader from '../components/Loader'; // Import the Loader component for displaying loading animation
 
 const ManageStock = () => {
+  const url = import.meta.env.VITE_BACKEND_URL; // Backend URL from environment variables
+  // fetch data from localStorage
+  const token = localStorage.getItem('token'); 
+
   // State variables
   const [stockAllocations, setStockAllocations] = useState([]); // To store fetched stock allocations
   const [kioskOwners, setKioskOwners] = useState([]); // To store fetched kiosk owners
@@ -11,8 +15,7 @@ const ManageStock = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // To control the visibility of the modal
   const [loading, setLoading] = useState(true); // To manage loading state
 
-  const url = import.meta.env.VITE_BACKEND_URL; // Backend URL from environment variables
-  const token = localStorage.getItem('token'); // JWT token for authentication
+
 
   useEffect(() => {
     if (!token) {
@@ -62,7 +65,7 @@ const ManageStock = () => {
     };
 
     fetchData(); // Call fetchData to initiate data fetching
-  }, [url, token]);
+  }, []);
 
   // Handler for form input changes
   const handleAllocationChange = (e) => {
