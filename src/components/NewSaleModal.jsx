@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 const NewSaleModal = ({ newSale, onChange, onSubmit, onClose, stores, allocations }) => {
   return (
@@ -86,4 +86,26 @@ const NewSaleModal = ({ newSale, onChange, onSubmit, onClose, stores, allocation
   );
 };
 
+// Define prop types
+NewSaleModal.propTypes = {
+    newSale: PropTypes.shape({
+      date: PropTypes.string.isRequired,
+      storeName: PropTypes.string.isRequired,
+      quantitySold: PropTypes.number.isRequired,
+      stockAllocationId: PropTypes.string.isRequired,
+    }).isRequired,
+    onChange: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    stores: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      storeName: PropTypes.string.isRequired,
+    })).isRequired,
+    allocations: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      allocatedStock: PropTypes.number.isRequired,
+    })).isRequired,
+  };
+  
+  
 export default NewSaleModal;

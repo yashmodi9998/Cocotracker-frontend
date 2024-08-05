@@ -67,7 +67,7 @@ const Stocks = () => {
     };
   
     fetchData();
-  }, []);
+  }, [token,url,userId]);
   
 
   // Handle return request submission

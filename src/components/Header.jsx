@@ -1,20 +1,55 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'; // Import jwt-decode library
 import logo from '/LOGO.png';
-const Header = () => {
-  
-  const token = localStorage.getItem('token');
-  const userRole = localStorage.getItem('role');
-  const userName = localStorage.getItem('name');
 
+const Header = () => {
+  const navigate = useNavigate(); // For navigation
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown visibility
+  const [token, setToken] = useState(localStorage.getItem('token')); // Manage token in state
+  const [userRole, setUserRole] = useState(localStorage.getItem('role')); // Manage user role in state
+  const [userName, setUserName] = useState(localStorage.getItem('name')); // Manage user name in state
+
+  // Function to handle logout
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove token from localStorage
-    window.location.href = '/login'; // Redirect to home page
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('name');
+    setToken(null);
+    setUserRole(null);
+    setUserName(null);
+    navigate('/login'); // Redirect to login page
   };
 
+  // Function to check if the token is expired
+  const isTokenExpired = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+      const isExpired = decodedToken.exp * 1000 < Date.now(); // Token expiry time in milliseconds
+      return isExpired;
+    } catch (error) {
+      console.error('Error decoding token:', error); // Debugging statement
+      return true; // If decoding fails, assume token is expired
+    }
+  };
+
+  // Function to check token validity and handle redirection
+  const checkTokenValidity = () => {
+    if (token && isTokenExpired(token)) {
+      handleLogout();
+    }
+  };
+
+  // Check token validity on component mount and on token change
+  useEffect(() => {
+    checkTokenValidity();
+    const intervalId = setInterval(checkTokenValidity, 60000); // Check token validity every minute
+    return () => clearInterval(intervalId); // Clean up the interval on component unmount
+  }, [checkTokenValidity]);
+
+  // Toggle dropdown visibility
   const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen); // Toggle dropdown 
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
@@ -23,7 +58,7 @@ const Header = () => {
         <div className="container mx-auto py-4 px-6 md:flex md:items-center md:justify-between">
           <div className="flex items-center justify-between">
             <NavLink to="/" className="text-xl font-semibold">
-            <img src={logo} alt="CocoTracker Logo" className="h-10 w-auto" />
+              <img src={logo} alt="CocoTracker Logo" className="h-10 w-auto" />
             </NavLink>
             <button
               className="md:hidden rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 p-2"
@@ -77,7 +112,7 @@ const Header = () => {
                       className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
                       to="/manage-stock"
                     >
-                    Stock
+                      Stock
                     </NavLink>
                   </>
                 )}
@@ -86,7 +121,7 @@ const Header = () => {
                     className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
                     to="/allocated-stock"
                   >
-                     Stock
+                    Stock
                   </NavLink>
                 )}
                 <div className="relative">

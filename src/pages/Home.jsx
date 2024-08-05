@@ -94,7 +94,7 @@ const Home = () => {
         },
       ],
     });
-  }, [url]);
+  }, [url,token,allocations,filteredSales]);
 
   // Function to filter sales data based on user role
   const filterSalesData = (salesData) => {
@@ -209,10 +209,10 @@ const Home = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{new Date(sale.date).toLocaleDateString()}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sale.storeName}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sale.kioskOwner}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sale.quantitySold}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sale.quantitySold} L</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sale.quantitySold * 60} rs</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {allocations.find(allocation => allocation._id === sale.stockAllocationId)?.allocatedStock || 0}
+                      {allocations.find(allocation => allocation._id === sale.stockAllocationId)?.allocatedStock || 0} L
                     </td>
                   </tr>
                 ))}

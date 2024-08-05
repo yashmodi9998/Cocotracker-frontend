@@ -1,6 +1,6 @@
-import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import PropTypes from 'prop-types';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -33,5 +33,10 @@ const SalesChart = ({ data }) => {
     </div>
   );
 };
+
+// Define prop types
+SalesChart.propTypes = {
+    data: PropTypes.object.isRequired, 
+  };
 
 export default SalesChart;

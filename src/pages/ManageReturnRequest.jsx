@@ -33,7 +33,7 @@ const ManageReturnRequest = () => {
     };
 
     fetchReturnRequests();
-  }, [url]);
+  }, [token,url]);
 
   // Handle approval of a return request
   const handleApproval = async (requestId) => {
@@ -73,6 +73,7 @@ const ManageReturnRequest = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+
   // to use CSS class for status badge based on the status value
   const statusBadgeClass = (status) => {
     switch (status) {
@@ -91,6 +92,10 @@ const ManageReturnRequest = () => {
     return <Loader />; // Show loader while data is being fetched
   }
 
+    // Filter and combine return requests: pending first
+    const pendingRequests = returnRequests.filter(request => request.status === 'pending');
+    const otherRequests = returnRequests.filter(request => request.status !== 'pending');
+    const sortedReturnRequests = [...pendingRequests, ...otherRequests];
   return (
     <div className="container mx-auto mt-10">
       <h1 className="text-2xl font-bold mb-4">Manage Return Requests</h1>
@@ -108,12 +113,12 @@ const ManageReturnRequest = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {returnRequests.map((request) => (
+            {sortedReturnRequests.map((request) => (
               <tr key={request._id}>
                 <td className="py-4 px-6 border-b border-gray-200">
-                  {request.stockAllocationId && request.stockAllocationId.kioskOwnerId ? request.stockAllocationId.kioskOwnerId.name : 'Unknown'}
+                  { request.stockAllocationId.kioskOwnerId.name }
                 </td>
-                <td className="py-4 px-6 border-b border-gray-200">{request.returningStock}</td>
+                <td className="py-4 px-6 border-b border-gray-200">{request.returningStock} L</td>
                 <td className="py-4 px-6 border-b border-gray-200">{request.reason}</td>
                 <td className="py-4 px-6 border-b border-gray-200">{formatDate(request.dateRequested)}</td>
                 <td className="py-4 px-6 border-b border-gray-200">
