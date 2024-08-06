@@ -8,6 +8,8 @@ export default defineConfig({
     outDir: "dist",
   },
   define: {
-    "process.env": process.env,
+    "process.env": {
+      VITE_BACKEND_URL: process.env.VITE_BACKEND_URL,
+    },
   },
 });
