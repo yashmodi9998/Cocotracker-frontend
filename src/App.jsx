@@ -23,9 +23,7 @@ function App() {
           <Route path="/user" element={<ProtectedRoute element={<User />} requiredRole="admin" />} />
           <Route path="/manage-stock" element={<ProtectedRoute element={<ManageStock />} requiredRole="admin" />} />
           <Route path="/manage-return-requests" element={ <ProtectedRoute element={<ManageReturnRequest />} requiredRole="admin"  />}/>
-       
           <Route path="/allocated-stock" element={<ProtectedRoute element={<Stocks />} requiredRole="kiosk owner" />} />
-      
           <Route path="*" element={<Home />} />
         </Routes>
         <Footer />

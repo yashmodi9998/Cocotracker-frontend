@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode'; // Import jwt-decode library
+import {jwtDecode} from 'jwt-decode'; 
 import logo from '/LOGO.png';
 
 const Header = () => {

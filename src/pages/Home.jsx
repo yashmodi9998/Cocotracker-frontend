@@ -35,6 +35,7 @@ const Home = () => {
 
       if (!token) {
         window.location.href = '/login'; // Redirect to login if token is missing
+        console.log('Fetching data...login'); 
         return;
       }
 
