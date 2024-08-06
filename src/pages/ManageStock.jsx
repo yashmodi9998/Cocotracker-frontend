@@ -92,7 +92,7 @@ const ManageStock = () => {
 
       setStockAllocations([...stockAllocations, response.data]); // Update stock allocations with new data
       setNewAllocation({ kioskOwnerId: '', allocatedStock: '' }); // Reset form data
-      setMessage(`Stock successfully allocated to ${response.data.kioskOwnerId.name}`); // Success message
+      setMessage(`Stock successfully allocated to ${response.data.kioskOwnerId?.name || 'unknown'}`); // Success message
       setIsModalOpen(false); // Close modal after successful allocation
     } catch (error) {
       console.error('Failed to allocate stock', error); // Log error
@@ -133,7 +133,7 @@ const ManageStock = () => {
             {stockAllocations.map((allocation) => (
               <tr key={allocation._id}>
                 <td className="py-4 px-6 border-b border-gray-200">
-                  {allocation.kioskOwnerId.name }
+                  {allocation.kioskOwnerId?.name }
                 </td>
                 <td className="py-4 px-6 border-b border-gray-200">{allocation.allocatedStock} L</td>
                 <td className="py-4 px-6 border-b border-gray-200">
