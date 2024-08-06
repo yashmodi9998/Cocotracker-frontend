@@ -94,7 +94,7 @@ const Home = () => {
         },
       ],
     });
-  }, [url,token,allocations,filteredSales]);
+  }, [url,token,allocations]);
 
   // Function to filter sales data based on user role
   const filterSalesData = (salesData) => {
