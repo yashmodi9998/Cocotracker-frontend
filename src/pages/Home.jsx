@@ -29,13 +29,10 @@ const Home = () => {
   const [chartData, setChartData] = useState(null);
 
   // useEffect to fetch data on component 
-  useEffect(() => {
-    console.log('Fetching data...'); 
+  useEffect(() => { 
     const fetchData = async () => {
-
       if (!token) {
         window.location.href = '/login'; // Redirect to login if token is missing
-        console.log('Fetching data...login'); 
         return;
       }
 
@@ -73,37 +70,13 @@ const Home = () => {
     };
 
     fetchData(); // Call fetchData function
-    const labels = filteredSales.map(sale => new Date(sale.date).toLocaleDateString());
-    const quantitySoldData = filteredSales.map(sale => sale.quantitySold);
-    const allocatedStockData = filteredSales.map(sale => {
-      const allocation = allocations.find(allocation => allocation._id === sale.stockAllocationId);
-      return allocation ? allocation.allocatedStock : 0;
-    });
-
-    // Set chart data state
-    setChartData({
-      labels,
-      datasets: [
-        {
-          label: 'Quantity Sold',
-          data: quantitySoldData,
-          backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        },
-        {
-          label: 'Allocated Stock',
-          data: allocatedStockData,
-          backgroundColor: 'rgba(153, 102, 255, 0.6)',
-        },
-      ],
-    });
-  }, [url,token,allocations]);
+  }, [url, token]);
 
   // Function to filter sales data based on user role
   const filterSalesData = (salesData) => {
     if (userRole === 'admin') {
       return salesData;
     } else {
-      
       return salesData.filter(sale => sale.kioskOwner === userName);
     }
   };
@@ -140,7 +113,7 @@ const Home = () => {
 
   // Filter allocations for dropdown based on logged-in user(sales form)
   const filteredAllocations = allocations.filter(
-    allocation => allocation.kioskOwnerId._id === userId
+    allocation => allocation.kioskOwnerId?._id === userId
   );
 
   // Handler for form input changes
@@ -214,7 +187,7 @@ const Home = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sale.quantitySold} L</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sale.quantitySold * 60} rs</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {allocations.find(allocation => allocation._id === sale.stockAllocationId)?.allocatedStock || 0} L
+                      {allocations?.find(allocation => allocation._id === sale.stockAllocationId)?.allocatedStock || 0} L
                     </td>
                   </tr>
                 ))}
