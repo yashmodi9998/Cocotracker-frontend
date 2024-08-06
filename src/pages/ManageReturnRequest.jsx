@@ -26,7 +26,7 @@ const ManageReturnRequest = () => {
         });
         setReturnRequests(response.data); // Update state with fetched data
       } catch (error) {
-        setError('Failed to fetch return requests: ' + (error.response?.data?.message || error.message));
+        setError('Failed to fetch return requests: ' + ( error.message));
       } finally {
         setLoading(false); // Set loading to false after data fetching
       }

@@ -173,9 +173,9 @@ const Stocks = () => {
                   onClick={() => handleRowClick(allocation._id)}
                 >
                   <td className="py-4 px-6 border-b border-gray-200">
-                    {allocation.kioskOwnerId ? allocation.kioskOwnerId.name : 'Unknown'}
+                    {allocation.kioskOwnerId.name }
                   </td>
-                  <td className="py-4 px-6 border-b border-gray-200">{allocation.allocatedStock}</td>
+                  <td className="py-4 px-6 border-b border-gray-200">{allocation.allocatedStock} L</td>
                   <td className="py-4 px-6 border-b border-gray-200">{new Date(allocation.dateAllocated).toLocaleDateString()}</td>
                   <td className="py-4 px-6 border-b border-gray-200">
                     {returnRequests[allocation._id] && returnRequests[allocation._id].status ? (
