@@ -30,6 +30,7 @@ const Home = () => {
 
   // useEffect to fetch data on component 
   useEffect(() => {
+    console.log('Fetching data...'); 
     const fetchData = async () => {
 
       if (!token) {
