@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Loader from '../components/Loader'; // Import the Loader component for displaying loading animation
+import Loader from '../components/Loader'; 
 
 const ManageStock = () => {
   const url = import.meta.env.VITE_BACKEND_URL; // Backend URL from environment variables
@@ -39,12 +39,11 @@ const ManageStock = () => {
       try {
         const response = await axios.get(`${url}/allocate-stock`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Add token to request headers
+            Authorization: `Bearer ${token}`, 
           },
         });
         setStockAllocations(response.data); // Update state with fetched data
       } catch (error) {
-        console.error('Failed to fetch stock allocations', error); // Log error
         setMessage('Failed to fetch stock allocations'); // Set message if fetching fails
       }
     };
@@ -59,7 +58,6 @@ const ManageStock = () => {
         });
         setKioskOwners(response.data.filter(user => user.role === 'kiosk owner')); // Filter and update state with kiosk owners
       } catch (error) {
-        console.error('Failed to fetch kiosk owners', error); // Log error
         setMessage('Failed to fetch kiosk owners'); // Set message if fetching fails
       }
     };
@@ -95,7 +93,6 @@ const ManageStock = () => {
       setMessage(`Stock successfully allocated to ${response.data.kioskOwnerId?.name || 'unknown'}`); // Success message
       setIsModalOpen(false); // Close modal after successful allocation
     } catch (error) {
-      console.error('Failed to allocate stock', error); // Log error
       setMessage('Failed to allocate stock'); // Set message if allocation fails
     }
   };

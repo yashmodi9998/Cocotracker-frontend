@@ -1,10 +1,11 @@
+import React from 'react';
 
 const Footer = () => {
   return (
-    <footer id="footer">
-      <div className="container-fluid">
-        <hr className="bg-light text-center" />
-        <div className="text-center">&copy; All rights reserved by Yash Modi, 2024.</div>
+    <footer className="bg-gray-800 text-white py-4">
+      <div className="container mx-auto flex justify-between  ">
+        <p className="text-sm">&copy; {new Date().getFullYear()} NGCocoTracker. All rights reserved.</p>
+        
       </div>
     </footer>
   );

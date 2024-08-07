@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Loader from '../components/Loader'; // Import the Loader component for displaying loading animation
+import Loader from '../components/Loader'; 
 
 const ManageReturnRequest = () => {
   

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Loader from '../components/Loader'; // Import the Loader component
+import Loader from '../components/Loader'; 
 
 const Stocks = () => {
   const url = import.meta.env.VITE_BACKEND_URL; // Backend URL from environment variables
@@ -34,7 +34,6 @@ const Stocks = () => {
         });
         setAllocations(response.data);
       } catch (error) {
-        console.error('Error fetching allocated stock:', error);
         setError('Failed to fetch allocated stock');
       }
     };
@@ -53,7 +52,6 @@ const Stocks = () => {
         });
         setReturnRequests(requests);
       } catch (error) {
-        console.error('Error fetching return requests:', error);
         setError('Failed to fetch return requests');
       }
     };
@@ -91,7 +89,6 @@ const Stocks = () => {
       await updateReturnRequests();
       setIsModalOpen(false); // Close modal after submission
     } catch (error) {
-      console.error('Error submitting return request:', error);
       setError('Failed to submit return request' + error);
     }
   };
@@ -110,7 +107,6 @@ const Stocks = () => {
       });
       setReturnRequests(requests);
     } catch (error) {
-      console.error('Error updating return requests:', error);
       setError('Failed to fetch return requests');
     }
   };
