@@ -8,19 +8,17 @@ The Coconut Juice Inventory Management System is a web application designed to h
 
 - **User Authentication**: Secure user authentication using JWT (JSON Web Tokens).
 - **Inventory Management**: Track the quantity and storage location of coconut juice.
-- **Sales Monitoring**: Monitor daily sales to analyze demand trends.
+- **Sales Monitoring**: Monitor daily sales to analyze demand trends using bar charts.
 - **Role-based Access Control**: Different levels of access for admins, kiosk owners, and other roles.
+- **Stock Allocation**: Admins can allocate new stock to users.
+- **Return Requests**: Users can place return requests, and admins can approve or reject them.
 
 ## Tech Stack
 
 - **Frontend**: React.js with Vite and Tailwind CSS for styling.
-- **Backend**: Node.js and Express.js for building the API.
+- **Backend**: Node.js and Express.js are used to build the API.
 - **Authentication**: JWT (JSON Web Tokens) for secure authentication.
 - **Database**: MongoDB for storing application data.
-
-## Getting Started
-
-Follow these instructions to get the CocoTracker frontend up and running on your local machine.
 
 ### Prerequisites
 
@@ -32,7 +30,7 @@ Follow these instructions to get the CocoTracker frontend up and running on your
 1. Clone the repository:
 
    ```bash
-   git clone https://yashmodi9998/Cocotracker-frontend.git
+   git clone https://github.com/yashmodi9998/Cocotracker-frontend.git
    ```
 
 2. Navigate into the project directory:
@@ -47,7 +45,6 @@ Follow these instructions to get the CocoTracker frontend up and running on your
    npm install
    ```
 
-
 ### Running the Application
 
 1. Start the development server:
@@ -56,13 +53,21 @@ Follow these instructions to get the CocoTracker frontend up and running on your
    npm run dev
    ```
 
-
 2. The application will be running at `http://localhost:5173`.
 
-## Usage
+## Bar Charts for Sales Data
 
-1. **Login**: Use valid credentials to authenticate and access the application.
-2. **View Inventory**: Navigate through different sections to view inventory levels and sales data.
-3. **Manage Inventory**: Update quantities, add new items, or delete items as necessary.
-4. **Monitor Sales**: Analyze daily sales data to make informed business decisions.
+The application uses bar charts from Chart.js to visually represent sales data. This feature provides a clear and intuitive way to monitor daily sales trends and make data-driven decisions.
+
+### Example of a Bar Chart:
+
+The bar chart displays sales data with the following details:
+- **X-axis**: Dates
+- **Y-axis**: Quantity of Coconut Juice Sold, allocated juice
+
+This visual representation helps quickly identify sales patterns and trends, enabling better inventory management.
+
+## Deployment
+
+This project is deployed on Vercel and can be accessed at [https://cocotracker.vercel.app](https://cocotracker.vercel.app)
 
